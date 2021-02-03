@@ -11,22 +11,21 @@
 //non interleaved callback
 typedef void (*MargueriteCb)(float **in, float **out, size_t size);
 
+timer_t timerid;
+struct itimerspec its;
+
 static void
 handler(int sig, siginfo_t *si, void *uc)
 {
-   printf("Caught signal %d\n", sig);
-   signal(sig, SIG_IGN);
 }
-
-
 
 //returns -1 on failure, 0 otherwise
 //cb rate in Hz.
 int StartCallback(long long callback_rate, int blocksize, MargueriteCb cb){
 	
-	timer_t timerid;
+	//timer_t timerid;
 	struct sigevent sev;
-	struct itimerspec its;
+	//struct itimerspec its;
 	long long freq_nanosecs;
 	sigset_t mask;
 	struct sigaction sa;
@@ -54,7 +53,6 @@ int StartCallback(long long callback_rate, int blocksize, MargueriteCb cb){
 	timer_settime(timerid, 0, &its, NULL);
 	
 	sigprocmask(SIG_UNBLOCK, &mask, NULL);
-	
 	
 	return 0;
 }
