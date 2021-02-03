@@ -8,24 +8,38 @@
 #define CLOCKID CLOCK_REALTIME
 #define SIG SIGRTMIN
 
+#define MAX_BLOCKSIZE 128
+#define MAX_CHANNELS 4
+
 //non interleaved callback
 typedef void (*MargueriteCb)(float **in, float **out, size_t size);
+MargueriteCb cb_;
 
-timer_t timerid;
-struct itimerspec its;
+float** in_;
+float** out_;
+size_t size_;
+int channels_;
 
 static void
 handler(int sig, siginfo_t *si, void *uc)
 {
+	cb_(in_, out_, size_);
 }
 
 //returns -1 on failure, 0 otherwise
 //cb rate in Hz.
-int StartCallback(long long callback_rate, int blocksize, MargueriteCb cb){
+int StartCallback(long long callback_rate, int blocksize, int channels, MargueriteCb cb){
+	cb_ = cb;
+
+	size_ = blocksize;
+	channels_ = channels;
 	
-	//timer_t timerid;
+	in_ = malloc(MAX_BLOCKSIZE * MAX_CHANNELS * sizeof(float));
+	out_ = malloc(MAX_BLOCKSIZE * MAX_CHANNELS * sizeof(float));
+	
+	timer_t timerid;
 	struct sigevent sev;
-	//struct itimerspec its;
+	struct itimerspec its;
 	long long freq_nanosecs;
 	sigset_t mask;
 	struct sigaction sa;
