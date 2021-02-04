@@ -1,10 +1,11 @@
-#
-# PortAudio V19 Makefile.in
-#
-# Dominic Mazzoni
-# Modifications by Mikael Magnusson
-# Modifications by Stelios Bounanos
-#
+#########################################################################
+#  	                                                                    #
+#   This is a bodged version of the real portaudio makefile             #
+#     it's setup right now just to build an example local to marguerite #
+#                     TODO build a proper makefile                      #
+#                                                                       #
+#########################################################################
+
 
 top_srcdir = ./portaudio/
 srcdir = ./portaudio/
