@@ -23,9 +23,7 @@ static int internalCallback( const void *inputBuffer, void *outputBuffer,
     return 0;
 }
 
-static paTestData data;
-int Init(int inputChannels, int outputChannels, int framesperbuffer, int samplerate MargueriteCallback cb){
-{
+int Init(int inputChannels, int outputChannels, int framesperbuffer, int samplerate, MargueriteCb cb){
     PaStream *stream;
     PaError err;
 
@@ -41,7 +39,7 @@ int Init(int inputChannels, int outputChannels, int framesperbuffer, int sampler
                                 samplerate,
                                 framesperbuffer,        /* frames per buffer */
                                 internalCallback,
-                                &data );
+                                NULL);
 								
     if( err != paNoError ) goto error;
 
