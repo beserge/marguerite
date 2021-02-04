@@ -3,3 +3,7 @@
 ./portaudio/*
 ./asio/*
 ./build/*
+portaudio
+bin
+build
+asio
