@@ -6,19 +6,27 @@ CINCLUDES = \
 -I./portaudio/include \
 -I./src/ \
 
-SOURCEDIR := src
-BUILDDIR := build
+SOURCEDIR := src    #DSP module sources
+TESTDIR   := test   #DSP test sources
+BUILDDIR  := build  #object files, etc.
+BINDIR    := bin    #executables
 
-SOURCES := $(wildcard $(SOURCEDIR)/*.c)
-OBJECTS := $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES))
+SOURCES   := $(wildcard $(SOURCEDIR)/*.c)
+OBJECTS   := $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES))
 
-all: $(OBJECTS)
+TESTS     := $(wildcard $(TESTDIR)/*.c)
+BINARIES  := $(patsubst $(TESTDIR)/%.c, $(BINDIR)/%.o, $(TESTS))
+
+all: $(OBJECTS) $(BINARIES)
 	$(CC) $(CFLAGS) $(CINCLUDES) -o test test.c
-	$(CC) $(CFLAGS) $(CINCLUDES) -o testsaw testsaw.c -lrt -lpthread -lwinmm -L ./portaudio/cbuild -l:libportaudio.a
 
 $(BUILDDIR)/%.o: $(SOURCEDIR)/%.c
 	mkdir -p build
 	$(CC) $(CFLAGS) $(CINCLUDES) -c $< -o $@
 
+$(BINDIR)/%.exe: $(TESTDIR)/%.c
+	mkdir -p build
+	$(CC) $(CFLAGS) $(CINCLUDES) -o $@ $< -lrt -lpthread -lwinmm -L ./portaudio/cbuild -l:libportaudio.a
+
 clean:
-	rm *.o *.exe ./build/*.o
+	rm *.o *.exe ./build/*.o ./bin/*
