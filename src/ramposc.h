@@ -10,4 +10,7 @@ typedef struct{
 	float sr_;        //engine samplerate
 } RampOsc;
 
+float RampOscInit(float sr, RampOsc* osc);
+float RampOscProcess(RampOsc* osc);
+
 #endif
