@@ -1,9 +1,8 @@
 #include <math.h>
-#include <portaudio.h>
 #include <stdio.h>
 
-#include <metro.h>
-#include <variableshapeosc.h>
+#include <portaudio.h>
+#include <marguerite.h>
 
 #define SAMPLE_RATE 41000
 

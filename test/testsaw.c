@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <portaudio.h>
+
 #define NUM_SECONDS   (4)
 #define SAMPLE_RATE   (44100)
 

@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <math.h>
+
 #include <portaudio.h>
-#include <variableshapeosc.h>
-#include <ramposc.h>
+#include <marguerite.h>
 
 
 #define SAMPLE_RATE 41000
