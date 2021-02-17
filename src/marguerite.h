@@ -6,6 +6,7 @@
 #include "dsp.h"
 #include "metro.h"
 #include "ramposc.h"
+#include "samplehold.h"
 #include "variableshapeosc.h"
 
 #endif
