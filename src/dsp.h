@@ -4,6 +4,16 @@
 
 #include <stdint.h>
 
+#define PI_F 3.1415927410125732421875f
+#define TWOPI_F (2.0f * PI_F)
+
+/** quick fp clamp
+*/
+inline float fclamp(float in, float min, float max)
+{
+    return fmin(fmax(in, min), max);
+}
+
 /** Ported from pichenettes/eurorack/plaits/dsp/oscillator/oscillator.h
 */
 inline float ThisBlepSample(float t)

@@ -7,6 +7,7 @@
 #include "metro.h"
 #include "ramposc.h"
 #include "samplehold.h"
+#include "svf.h"
 #include "variableshapeosc.h"
 
 #endif
