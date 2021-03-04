@@ -3,6 +3,7 @@
 #define MRG_DSP_H
 
 #include <stdint.h>
+#include <math.h>
 
 #define PI_F 3.1415927410125732421875f
 #define TWOPI_F (2.0f * PI_F)

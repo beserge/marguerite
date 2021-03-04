@@ -34,7 +34,9 @@ void SvfProcess(Svf* svf, float in)
     svf->low_   = svf->low_ + svf->freq_ * svf->band_;
     svf->high_  = svf->notch_ - svf->low_;
     svf->band_  = svf->freq_ * svf->high_ + svf->band_ - svf->drive_ * svf->band_ * svf->band_ * svf->band_;
-    // take first sample of output
+	svf->band_ = isnan(svf->band_) ? 0.f : svf->band_; 
+	
+	// take first sample of output
     svf->out_low_   = 0.5f * svf->low_;
     svf->out_high_  = 0.5f * svf->high_;
     svf->out_band_  = 0.5f * svf->band_;
@@ -46,7 +48,9 @@ void SvfProcess(Svf* svf, float in)
     svf->low_   = svf->low_ + svf->freq_ * svf->band_;
     svf->high_  = svf->notch_ - svf->low_;
     svf->band_  = svf->freq_ * svf->high_ + svf->band_ - svf->drive_ * svf->band_ * svf->band_ * svf->band_;
-    // average second pass outputs
+	svf->band_ = isnan(svf->band_) ? 0.f : svf->band_; 
+	
+	// average second pass outputs
     svf->out_low_ += 0.5f * svf->low_;
     svf->out_high_ += 0.5f * svf->high_;
     svf->out_band_ += 0.5f * svf->band_;

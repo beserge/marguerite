@@ -31,11 +31,9 @@ static int AudioCallback( const void *inputBuffer, void *outputBuffer,
         float sig = VariableShapeOscProcess(&data->osc);
 		SvfProcess(&data->svf, sig);
 		float lfo = RampOscProcess(&data->lfo);
-		//SvfSetFreq(&data->svf, fabsf(lfo) * 5000.f);
-				
-		printf("%.6f\n", data->svf.out_high_);
-				
-		*out++ = data->svf.out_high_;  /* left  */
+		SvfSetFreq(&data->svf, fabsf(lfo) * 5000.f);
+								
+		*out++ = data->svf.out_low_;  /* left  */
         *out++ = data->svf.out_high_;  /* right */
     }
 
