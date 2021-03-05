@@ -6,6 +6,7 @@
 #include "delayline.h"
 #include "dsp.h"
 #include "metro.h"
+#include "oscillator.h"
 #include "ramposc.h"
 #include "samplehold.h"
 #include "svf.h"
