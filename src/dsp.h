@@ -4,9 +4,13 @@
 
 #include <stdint.h>
 #include <math.h>
+#include <stdlib.h>
 
 #define PI_F 3.1415927410125732421875f
 #define TWOPI_F (2.0f * PI_F)
+
+static float kRandFrac = 1.f / (float)RAND_MAX;
+static float kOneTwelfth = 1.f / 12.f;
 
 /** quick fp clamp
 */
@@ -45,6 +49,11 @@ inline float NextIntegratedBlepSample(float t)
 inline float ThisIntegratedBlepSample(float t)
 {
     return NextIntegratedBlepSample(1.0f - t);
+}
+
+inline void fonepole(float* out, float in, float coeff)
+{
+    *out += coeff * (in - *out);
 }
 
 #endif
