@@ -9,6 +9,7 @@
 #include "oscillator.h"
 #include "ramposc.h"
 #include "samplehold.h"
+#include "sampleratereducer.h"
 #include "slew.h"
 #include "svf.h"
 #include "variableshapeosc.h"
