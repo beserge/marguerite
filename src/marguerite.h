@@ -11,6 +11,7 @@
 #include "samplehold.h"
 #include "sampleratereducer.h"
 #include "syntheticbassdrum.h"
+#include "syntheticsnaredrum.h"
 #include "slew.h"
 #include "svf.h"
 #include "variableshapeosc.h"
