@@ -1,6 +1,6 @@
 #include "ramposc.h"
 
-float RampOscInit(float sr, RampOsc* osc){
+float RampOscInit(RampOsc* osc, float sr){
 	osc->phase_ = 0.f;
 	osc->phase_inc_ = 2.f * 440.f / sr; //-1 to 1
 	osc->sr_ = sr;

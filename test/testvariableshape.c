@@ -49,10 +49,10 @@ int main(void)
     printf("Marguerite Test: Variable Shape Oscillator. \n");
 
 	//Init the variable shape osc module
-	VariableShapeOscInit(SAMPLE_RATE, &data.osc);
+	VariableShapeOscInit(&data.osc, SAMPLE_RATE);
 
 	//Init the ramp lfo
-	RampOscInit(SAMPLE_RATE, &data.lfo);
+	RampOscInit(&data.lfo, SAMPLE_RATE);
 	data.lfo.phase_inc_ = 1.f / (float)SAMPLE_RATE; //freq = 1 Hz
 
     err = Pa_Initialize();

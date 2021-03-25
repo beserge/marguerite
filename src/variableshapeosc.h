@@ -25,7 +25,7 @@ typedef struct{
     float waveshape_;
 } VariableShapeOsc;
 
-float VariableShapeOscInit(float sr, VariableShapeOsc* osc);
+float VariableShapeOscInit(VariableShapeOsc* osc, float sr);
 float VariableShapeOscProcess(VariableShapeOsc* osc);
 
 #endif

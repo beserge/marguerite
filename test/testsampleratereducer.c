@@ -52,7 +52,7 @@ int main(void)
 	OscillatorInit(&data.osc, SAMPLE_RATE);
 
 	//Init the ramp lfo
-	RampOscInit(SAMPLE_RATE, &data.lfo);
+	RampOscInit(&data.lfo, SAMPLE_RATE);
 	data.lfo.phase_inc_ = 1.f / (float)SAMPLE_RATE; //freq = 1 Hz
 
 	SampleRateReducerInit(&data.srr);
