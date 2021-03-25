@@ -1,6 +1,4 @@
 #include "variableshapeosc.h"
-#include "dsp.h"
-#include <math.h>
 
 float VariableShapeOscInit(float sr, VariableShapeOsc* osc){
     osc->sample_rate_ = sr;

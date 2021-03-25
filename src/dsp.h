@@ -12,7 +12,7 @@
 static float kRandFrac = 1.f / (float)RAND_MAX;
 static float kOneTwelfth = 1.f / 12.f;
 
-float Whitenoise(){
+inline static float Whitenoise(){
 	return (2.f * rand() * kRandFrac) - 1.f;
 }
 

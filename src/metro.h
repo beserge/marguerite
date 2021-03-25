@@ -2,6 +2,8 @@
 #ifndef MRG_METRO_H
 #define MRG_METRO_H
 #include <stdint.h>
+#include "dsp.h"
+#include <math.h>
 
 typedef struct {
   float phs_;

@@ -4,6 +4,8 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "dsp.h"
+#include <math.h>
 
 typedef struct{
 	float sample_rate_;
