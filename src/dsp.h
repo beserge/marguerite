@@ -12,6 +12,10 @@
 static float kRandFrac = 1.f / (float)RAND_MAX;
 static float kOneTwelfth = 1.f / 12.f;
 
+float Whitenoise(){
+	return (2.f * rand() * kRandFrac) - 1.f;
+}
+
 /** quick fp clamp
 */
 inline float fclamp(float in, float min, float max)
