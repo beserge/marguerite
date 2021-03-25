@@ -66,7 +66,7 @@ void SyntheticBassDrumInit(SyntheticBassDrum* sbd, float sample_rate)
     SBDAttackNoiseInit(&sbd->noise_);
 }
 
-float DistortedSine(float phase,
+float SBDDistortedSine(float phase,
                            float phase_noise,
                            float dirtiness){
     phase += phase_noise * dirtiness;
@@ -129,7 +129,7 @@ float SyntheticBassDrumProcess(SyntheticBassDrum* sbd, bool trigger)
         {
             sbd->phase_ -= 1.0f;
         }
-        float body = DistortedSine(sbd->phase_, sbd->phase_noise_, dirtiness);
+        float body = SBDDistortedSine(sbd->phase_, sbd->phase_noise_, dirtiness);
         mix -= TransistorVCA(body, sbd->sustain_gain_);
     }
     else
@@ -166,7 +166,7 @@ float SyntheticBassDrumProcess(SyntheticBassDrum* sbd, bool trigger)
         fonepole(&sbd->transient_env_lp_, sbd->transient_env_, envelope_lp_f);
         fonepole(&sbd->fm_lp_, sbd->fm_, envelope_lp_f);
 
-        float body      = DistortedSine(sbd->phase_, sbd->phase_noise_, dirtiness);
+        float body      = SBDDistortedSine(sbd->phase_, sbd->phase_noise_, dirtiness);
         float transient = SBDClickProcess(&sbd->click_, sbd->body_env_pulse_width_ ? 0.0f : 1.0f)
                           + SBDAttackNoiseProcess(&sbd->noise_);
 

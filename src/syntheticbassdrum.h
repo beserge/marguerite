@@ -63,7 +63,7 @@ typedef struct{
 void SyntheticBassDrumInit(SyntheticBassDrum* sbd, float sample_rate);
 float SyntheticBassDrumProcess(SyntheticBassDrum* sbd, bool trigger);
 
-float DistortedSine(float phase, float phase_noise, float dirtiness);
+float SBDDistortedSine(float phase, float phase_noise, float dirtiness);
 float TransistorVCA(float s, float gain);
 
 #endif
