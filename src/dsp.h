@@ -66,7 +66,7 @@ inline float ftor(float freq, float sample_rate){
 }
 
 inline static float mtof(float m){
-     return powf(2, (m - 33.0f) * kOneTwelfth) * 55.f;
+     return powf(2.f, (m - 33.f) * kOneTwelfth) * 55.f;
 }
 
 inline static float mtor(float m, float sr){

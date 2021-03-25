@@ -39,8 +39,8 @@ void ParseLines(paData* data){
 	for(int i = 0; i < NUM_TRACKS; i++){
 		read = getline(&line, &len, data->fp[i]);
 		if(read == -1){
-			printf("EOF\n");
-			exit(EXIT_SUCCESS);
+			rewind(data->fp[i]); //eof loop to start
+			read = getline(&line, &len, data->fp[i]);
 		}
 			
 		char * token = strtok(line, " ");
@@ -89,19 +89,32 @@ static int AudioCallback(const void *inputBuffer, void *outputBuffer,
 	if(t){
 		ParseLines(data);
 	}
-	
-	//freqs
-	data->osc1.phase_inc_ = mtor(data->linedata[0][0], SAMPLE_RATE);
-	data->osc2.phase_inc_ = mtor(data->linedata[1][0], SAMPLE_RATE);
-	data->vsosc.slave_frequency_ = mtor(data->linedata[2][0], SAMPLE_RATE);
-		
-	//process
+
 	float sig = 0.f;
-	sig += fixNan(OscillatorProcess(&data->osc1) * AdsrProcess(&data->envs[0], t));
-	sig += fixNan(OscillatorProcess(&data->osc2) * AdsrProcess(&data->envs[1], t));
-	sig += fixNan(VariableShapeOscProcess(&data->vsosc) * AdsrProcess(&data->envs[2], t));
+	bool mute = data->linedata[0][0] <= 0;
+	float envsig =  AdsrProcess(&data->envs[0], t & !mute);
+	sig += OscillatorProcess(&data->osc1) * envsig;
+	if(!mute){
+		float freq = mtof(data->linedata[0][0]);
+		data->osc1.phase_inc_ = OscillatorCalcPhaseInc(&data->osc1, freq);
+	}
+
+	mute = data->linedata[1][0] <= 0;
+	envsig =  AdsrProcess(&data->envs[1], t & !mute);
+	sig += OscillatorProcess(&data->osc2) * envsig;
+	if(!mute){
+		float freq = mtof(data->linedata[1][0]);
+		data->osc2.phase_inc_ = OscillatorCalcPhaseInc(&data->osc2, freq);
+	}					
+
+	mute = data->linedata[2][0] <= 0;
+	envsig =  AdsrProcess(&data->envs[2], t & !mute);
+	if(!mute){
+		data->vsosc.slave_frequency_ = mtor(data->linedata[2][0], SAMPLE_RATE);
+	}
+	sig += fixNan(VariableShapeOscProcess(&data->vsosc) * envsig);
+
 	sig /= (float)NUM_TRACKS;
-	
     *out++ = sig;
     *out++ = sig;
   }
