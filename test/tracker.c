@@ -1,32 +1,58 @@
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <portaudio.h>
 #include <marguerite.h>
 
 #define SAMPLE_RATE 41000
+#define NUM_TRACKS 3
+#define NUM_ENVS 4
 
-#define NUM_TRACKS 4
+#define DEBUG 1
+
+float fixNan(float num){
+	return num != num ? 0.f : num;
+}
 
 typedef struct {
 	FILE* fp[NUM_TRACKS];
 	int linenum;
+	int linedata[NUM_TRACKS][3]; //note, comnum, comval
+
+	Oscillator osc1;
+	Oscillator osc2;
+	VariableShapeOsc vsosc;
+	SyntheticBassDrum bd;
+	SyntheticSnareDrum sd;
+
+	Adsr envs[NUM_ENVS]; //3 oscs and 1 noise
+
+	Metro tick;
 } paData;
 
-void ParseLine(paData* data){
+void ParseLines(paData* data){
     char* line = NULL;
     size_t len = 0;
     ssize_t read;
 
-	for(int i = 0; i < 4; i++){
+	for(int i = 0; i < NUM_TRACKS; i++){
 		read = getline(&line, &len, data->fp[i]);
 		if(read == -1){
 			printf("EOF\n");
 			exit(EXIT_SUCCESS);
 		}
-		printf("%s", line);
+			
+		char * token = strtok(line, " ");
+		int j = 0;
+		while(token != NULL && j < 3) {
+			char* pEnd;
+			data->linedata[i][j] = atoi(token);
+			token = strtok(NULL, " ");
+			j++;
+		}
 	}
-
+   	
     if (line)
         free(line);
 }
@@ -47,6 +73,8 @@ void OpenTracks(paData* data){
 	}
 }
 
+
+//instruments are osc, osc, varishape, kick, snare, env noise
 static int AudioCallback(const void *inputBuffer, void *outputBuffer,
                          unsigned long framesPerBuffer,
                          const PaStreamCallbackTimeInfo *timeInfo,
@@ -57,8 +85,25 @@ static int AudioCallback(const void *inputBuffer, void *outputBuffer,
 
   unsigned int i;
   for (i = 0; i < framesPerBuffer; i++) {
-    *out++ = 0.f;
-    *out++ = 0.f;
+	bool t = MetroProcess(&data->tick);
+	if(t){
+		ParseLines(data);
+	}
+	
+	//freqs
+	data->osc1.phase_inc_ = mtor(data->linedata[0][0], SAMPLE_RATE);
+	data->osc2.phase_inc_ = mtor(data->linedata[1][0], SAMPLE_RATE);
+	data->vsosc.slave_frequency_ = mtor(data->linedata[2][0], SAMPLE_RATE);
+		
+	//process
+	float sig = 0.f;
+	sig += fixNan(OscillatorProcess(&data->osc1) * AdsrProcess(&data->envs[0], t));
+	sig += fixNan(OscillatorProcess(&data->osc2) * AdsrProcess(&data->envs[1], t));
+	sig += fixNan(VariableShapeOscProcess(&data->vsosc) * AdsrProcess(&data->envs[2], t));
+	sig /= (float)NUM_TRACKS;
+	
+    *out++ = sig;
+    *out++ = sig;
   }
 
   return 0;
@@ -70,7 +115,21 @@ int main(void) {
   PaError err;
 
   OpenTracks(&data);
-  ParseLine(&data);
+
+  MetroInit(&data.tick, SAMPLE_RATE);
+  data.tick.phs_inc_ = ftor(3.f, SAMPLE_RATE);
+  
+  OscillatorInit(&data.osc1, SAMPLE_RATE);
+  OscillatorInit(&data.osc2, SAMPLE_RATE);
+  VariableShapeOscInit(&data.vsosc, SAMPLE_RATE);
+  SyntheticBassDrumInit(&data.bd, SAMPLE_RATE);
+  SyntheticSnareDrumInit(&data.sd, SAMPLE_RATE);
+
+	for(int i = 0; i < NUM_ENVS; i++){
+		AdsrInit(&data.envs[i], SAMPLE_RATE);
+		data.envs[i].seg_time_[ADSR_SEG_ATTACK] = .00001f;
+		data.envs[i].seg_time_[ADSR_SEG_DECAY] = .1f;
+	}
 
   printf("Marguerite Test: Simple Tracker\n");
 
