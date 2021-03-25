@@ -1,6 +1,4 @@
 #include "metro.h"
-#include "dsp.h"
-#include <math.h>
 
 void MetroInit(Metro *m, float sample_rate) {
   m->phs_ = 0.f;

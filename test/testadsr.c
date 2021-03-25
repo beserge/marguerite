@@ -61,7 +61,7 @@ int main(void) {
   printf("Marguerite Test: Adsr module. \n");
 
   // Init the variable shape osc module
-  VariableShapeOscInit(SAMPLE_RATE, &data.osc);
+  VariableShapeOscInit(&data.osc, SAMPLE_RATE);
 
   MetroInit(&data.tick, SAMPLE_RATE);
   data.tick.phs_inc_ = 1.f / SAMPLE_RATE;

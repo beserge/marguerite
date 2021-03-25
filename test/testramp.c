@@ -43,7 +43,7 @@ int main(void)
     printf("Marguerite Test: Ramp Oscillator. \n");
 
 	//Init the ramp osc module
-	RampOscInit(SAMPLE_RATE, &data.osc);
+	RampOscInit(&data.osc, SAMPLE_RATE);
 
     err = Pa_Initialize();
     if( err != paNoError ) goto error;

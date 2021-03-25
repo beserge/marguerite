@@ -6,17 +6,8 @@
 
 #define SAMPLE_RATE 41000
 
-float fixNan(float n){
-	return n != n ? 0.f : n;
-}
-
 typedef struct {
-  VariableShapeOsc osc;
-  Metro tick;
-  Slew slew;
 } paData;
-
-float freq = 44.f;
 
 static int AudioCallback(const void *inputBuffer, void *outputBuffer,
                          unsigned long framesPerBuffer,
@@ -28,19 +19,8 @@ static int AudioCallback(const void *inputBuffer, void *outputBuffer,
 
   unsigned int i;
   for (i = 0; i < framesPerBuffer; i++) {
-    if (MetroProcess(&data->tick)) {
-		freq *= 2.f;
-		if(freq > 800.f){
-			freq = 44.f;
-		}
-	}
-
-	data->osc.slave_frequency_ = SlewProcess(&data->slew, freq) / SAMPLE_RATE;
-
-    float sig = VariableShapeOscProcess(&data->osc);
-
-    *out++ = fixNan(sig); /* left  */
-    *out++ = fixNan(sig); /* right */
+    *out++ = Whitenoise();
+    *out++ = Whitenoise();
   }
 
   return 0;
@@ -51,16 +31,7 @@ int main(void) {
   PaStream *stream;
   PaError err;
 
-  printf("Marguerite Test: Slew module. \n");
-
-  // Init the variable shape osc module
-  VariableShapeOscInit(&data.osc, SAMPLE_RATE);
-
-  MetroInit(&data.tick, SAMPLE_RATE);
-  data.tick.phs_inc_ = 1.f / SAMPLE_RATE;
-
-  SlewInit(&data.slew, SAMPLE_RATE);
-  SlewSetRate(&data.slew, .1f);
+  printf("Marguerite Test: Whitenoise. \n");
 
   err = Pa_Initialize();
   if (err != paNoError)

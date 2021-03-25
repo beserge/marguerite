@@ -12,6 +12,10 @@
 static float kRandFrac = 1.f / (float)RAND_MAX;
 static float kOneTwelfth = 1.f / 12.f;
 
+inline static float Whitenoise(){
+	return (2.f * rand() * kRandFrac) - 1.f;
+}
+
 /** quick fp clamp
 */
 inline float fclamp(float in, float min, float max)
@@ -54,6 +58,19 @@ inline float ThisIntegratedBlepSample(float t)
 inline void fonepole(float* out, float in, float coeff)
 {
     *out += coeff * (in - *out);
+}
+
+//convert a freq in hz to a ratio
+inline float ftor(float freq, float sample_rate){
+	return freq / sample_rate;
+}
+
+inline static float mtof(float m){
+     return powf(2, (m - 33.0f) * kOneTwelfth) * 55.f;
+}
+
+inline static float mtor(float m, float sr){
+	return ftor(mtof(m), sr);
 }
 
 #endif

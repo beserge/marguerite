@@ -62,7 +62,7 @@ int main(void)
     printf("Marguerite Test: Variable Shape Oscillator. \n");
 
 	//Init the variable shape osc module
-	VariableShapeOscInit(SAMPLE_RATE, &data.osc);
+	VariableShapeOscInit(&data.osc, SAMPLE_RATE);
 
 	//Init the adsr
 	AdsrInit(&data.adsr, SAMPLE_RATE);
